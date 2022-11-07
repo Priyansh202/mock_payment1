@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>PayPal Standard Payments Integration | Client Demo</title>
+      </head>
+
+
+      <body>
+        
+        
+       
+        <div id="paypal-button-container">
+           
+       
+        </div>
+        <!-- Sample PayPal credentials (client-id) are included -->
+        <script src="https://www.paypal.com/sdk/js?client-id=AfAnDfwGwZsG-H9Ngu3qhwWMHcf4UmCCiJaz6wl_fz-NdNoNnKO5QS4-yCi918KGBAvPNNzJZEbEsUhq&currency=USD&intent=capture&enable-funding=venmo" data-sdk-integration-source="integrationbuilder"></script>
+        <script>
+           
+            
+          const paypalButtonsComponent = paypal.Buttons({
+              // optional styling for buttons
+              // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
+              style: {
+                color: "gold",
+                shape: "rect",
+                layout: "vertical"
+              },
+
+              // set up the transaction
+              createOrder: (data, actions) => {
+                  // pass in any options from the v2 orders create call:
+                  // https://developer.paypal.com/api/orders/v2/#orders-create-request-body
+                  const createOrderPayload = {
+                      purchase_units: [
+                          {
+                              amount: {
+                                  value: {{val}}
+                              }
+                          }
+                      ]
+                  };
+
+                  return actions.order.create(createOrderPayload);
+
+              },
+
+              // finalize the tra    nsaction
+              onApprove: (data, actions) => {
+                  const captureOrderHandler = (details) => {
+                      const payerName = details.payer.name.given_name;
+                      console.log('Transaction completed');
+                      transaction_id1=details.id
+                      transaction_status=details.status
+                      transaction_update_time=details.update_time
+                      transaction_email_address=details.payer.email_address
+                      //<form action="form_valid" method="post">
+                    //{% csrf_token %}
+                        //  <label for=""></label>
+                         // <input type="text" id="username"name="username" placeholder="enter username"  Required>
+                         // <label for="">Password</label>
+                    //<input type="password" id="pass1"name="pass1" placeholder="enter password"  Required>
+                        //  # <br>
+                          // #<button type="submit">sign in</button>
+                          
+                        
+                      // # </form>  
+                      console.log(details)
+                      
+                      alert(   + transaction_id1 + '!' )       
+                  };
+
+                  
+                      
+  
+                  return actions.order.capture().then(captureOrderHandler);
+                  
+
+                  
+                    
+              },
+              
+              // handle unrecoverable errors
+              onError: (err) => {
+                  console.error('An error prevented the buyer from checking out with PayPal');
+                  alert( 'Transaction Failed'   + transaction_id1 + '!' ) 
+              }
+          });
+          
+
+          paypalButtonsComponent
+              .render("#paypal-button-container")
+              .catch((err) => {
+                  console.error('PayPal Buttons failed to render');
+                  alert('PayPal Buttons failed to render');
+              });
+             
+             
+                   
+                
+        </script>
+        <script>
+$.ajax({
+            type: 'POST',
+          data: JSON.stringify(details.id,details.status,details.update_time),
+            contentType: 'application/json',
+            url: "{% url 'history' %}",
+            headers: {
+             'X-CSRFToken': '{{ csrf_token }}'
+            },
+            success: function(j) {
+                ...
+
+            })
+        </script>
+        
+        
+      </body>
+    </html>
